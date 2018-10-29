@@ -37,19 +37,22 @@ dependencies {
     implementation 'com.android.support:design:28.0.0'
     implementation 'com.android.support:support-annotations:28.0.0'
 
-    testImplementation 'junit:junit:4.12'
+    testImplementation "junit:junit:$junit_version"
 
     // use git version
-//    androidTestImplementation project(':android-xml-run-listener')
+    androidTestImplementation project(':android-test-rules')
+    androidTestImplementation project(':android-xml-run-listener')
+//    androidTestImplementation project(':screenshot')
 
     // use published version
-    androidTestImplementation "de.schroepf:android-xml-run-listener:$android_xml_run_listener_version"
+//    androidTestImplementation "de.schroepf:android-xml-run-listener:$android_xml_run_listener_version"
 
     // Android Testing Support Library's runner and rules
-    androidTestImplementation ("com.android.support.test.espresso:espresso-core:3.0.1") {
+    androidTestImplementation("com.android.support.test.espresso:espresso-core:$espresso_version") {
         exclude module: 'support-annotations'
     }
 
     androidTestImplementation "com.android.support.test:runner:$test_runner_version"
+    androidTestImplementation "com.android.support.test:rules:$test_rules_version"
     androidTestUtil "com.android.support.test:orchestrator:$test_orchestrator_version"
 }

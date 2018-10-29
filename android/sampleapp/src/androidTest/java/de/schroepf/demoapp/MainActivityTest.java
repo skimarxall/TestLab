@@ -1,26 +1,21 @@
 package de.schroepf.demoapp;
 
+import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.support.test.runner.screenshot.ScreenCaptureProcessor;
-import android.support.test.runner.screenshot.Screenshot;
 
-import org.junit.Before;
+import org.junit.ClassRule;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
-
-import de.schroepf.demoapp.screenshot.LocaleTestRule;
-import de.schroepf.demoapp.screenshot.ScreenshotProcessor;
+import de.schroepf.androidtestrules.DemoModeRule;
+import de.schroepf.androidtestrules.NoAnimationsRule;
+import de.schroepf.androidtestrules.Screenshot;
+import de.schroepf.androidtestrules.ScreenshotActivityRule;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.isRoot;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.is;
@@ -33,15 +28,20 @@ import static org.junit.Assume.assumeThat;
 @RunWith(AndroidJUnit4.class)
 public class MainActivityTest {
 
-    @Rule
-    public LocaleTestRule<MainActivity> localeTestRule = new LocaleTestRule<>(MainActivity.class, "de-DE", "en-US", "fr-FR");
+    @ClassRule
+    public static NoAnimationsRule noAnimationsRule = new NoAnimationsRule();
 
-    @Before
-    public void setup() {
-        Set<ScreenCaptureProcessor> processors = new HashSet<>();
-        processors.add(new ScreenshotProcessor());
-        Screenshot.addScreenCaptureProcessors(processors);
-    }
+    @ClassRule
+    public static DemoModeRule demoModeRule = new DemoModeRule.Builder()
+            .clock("0123")
+            .batteryLevel(12)
+            .batteryPlugged(false)
+            .notifications(false)
+            .airplane(false)
+            .build();
+
+    @Rule
+    public ActivityTestRule<MainActivity> activityTestRule = new ScreenshotActivityRule<>(MainActivity.class);
 
     @Test
     @Ignore
@@ -59,11 +59,8 @@ public class MainActivityTest {
         fail("This is just a failing test");
     }
 
+    @Screenshot
     @Test
-    public void screenshotTest() throws IOException {
-        onView(isRoot()).check(matches(isDisplayed()));
-        Screenshot.capture()
-                .setName(localeTestRule.getCurrentLocale().toLanguageTag())
-                .process();
+    public void screenshotTest() {
     }
 }
