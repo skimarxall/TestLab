@@ -4,11 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.media.ExifInterface;
 import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.test.InstrumentationRegistry;
-import android.support.test.runner.screenshot.ScreenCapture;
-import android.support.test.runner.screenshot.ScreenCaptureProcessor;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -19,6 +14,12 @@ import java.util.Date;
 import java.util.Locale;
 
 import javax.annotation.Nonnull;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.test.InstrumentationRegistry;
+import androidx.test.runner.screenshot.ScreenCapture;
+import androidx.test.runner.screenshot.ScreenCaptureProcessor;
 
 public class ScreenshotProcessor implements ScreenCaptureProcessor {
 
@@ -47,7 +48,8 @@ public class ScreenshotProcessor implements ScreenCaptureProcessor {
 
         File imageFile = new File(dir, name + extensionForFormat(compressFormat));
 
-        try (OutputStream out = new FileOutputStream(imageFile)) {
+        try {
+            OutputStream out = new FileOutputStream(imageFile);
             bitmap.compress(compressFormat, 100, out);
             out.flush();
         } finally {
